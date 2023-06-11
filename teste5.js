@@ -1,9 +1,8 @@
+const { userAccessCount } = require("./teste1");
 
+module.exports = function (req, res) {
+  const { name } = req.query;
 
-module.exports = function(req, res){
-    
-    var name =  req.query.name;
-
-    res.send("Usuário " +  name  + "  foi lido 0 vezes.");
-
+  //Lembrando que as atualizações estão armazenadas somente em memória.
+  res.send(`Usuário ${name} foi lido ${userAccessCount[name]} vezes.`);
 };

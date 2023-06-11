@@ -1,13 +1,22 @@
-var data =  require("./fakeData");
+let data = require("./fakeData");
 
-module.exports =  function(req, res) {
-  
-    var id =  req.query.id;
+module.exports = function (req, res) {
+  const { id } = req.query;
+  const { name, job } = req.body;
 
-    const reg = data.find(d => id == id);
-    reg.name = req.body.name;
-    reg.job = req.body.job;
+  if (!id || !name || !job) return res.send({});
 
-    res.send(reg);
+  const userIndex = data.findIndex((user) => user.id === id);
 
+  if (userIndex === -1) return res.send({});
+
+  const updatedUser = {
+    ...data[userIndex],
+    name,
+    job,
+  };
+
+  // o código abaixo  não irá  realmente atualizar o usuário, apenas o objeto na memória como discutido anteriormente
+  data = data.slice(0, userIndex).concat(data.slice(userIndex + 1));
+  return res.send(updatedUser);
 };

@@ -1,24 +1,24 @@
-var data =  require("./fakeData");
+const data = require("./fakeData");
 
-const getUser = ( req, res, next ) => {
-    
-    var name =  req.query.name;
+const userAccessCount = {};
 
-    for(let i = 0; i < data.length;  i++) {
-        if(i.name == name) {
-            res.send(data[i]);
-        }
-    }
+const getUser = (req, res) => {
+  const { name } = req.query;
+  const user = data.find((user) => user.name === name) || {};
 
+  if (user.name) {
+    userAccessCount[user.name] = (userAccessCount[user.name] || 0) + 1;
+  }
+
+  return res.send(user);
 };
 
-const getUsers = ( req, res, next ) => {
-    
-    res.send(data);
-    
+const getUsers = (req, res) => {
+  return res.send(data);
 };
 
 module.exports = {
-    getUser,
-    getUsers
+  getUser,
+  getUsers,
+  userAccessCount,
 };
